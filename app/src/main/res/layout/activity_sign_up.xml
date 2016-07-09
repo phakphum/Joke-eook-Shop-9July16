@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="eco.phakphum.jokeebookshop.SignUpActivity"
-    android:background="@drawable/bg27">
+    android:background="@drawable/bg27"
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +26,8 @@
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:id="@+id/button3"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:onClick="clickSignUpSign" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -36,7 +38,7 @@
         android:layout_margin="15dp"
         android:padding="15dp"
         android:baselineAligned="false"
-        android:background="#50ffffff">
+        android:background="#32ffffff">
 
         <LinearLayout
             android:orientation="horizontal"
