@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         // Explicit
         // Context เป็นการ ทำการพ่น ข้อมูลระหว่าง Class กับ Class
         private Context context;    // ตัวแปรสำหรับการเชื่อมต่อ
-        private String myURL,myUserString, myPasswordString , truePassword;
+        private String myURL,myUserString, myPasswordString ,
+                truePassword ,loginNameString, loginSurnameString;
         private boolean statusABoolean = true;
 
         // Alt + Insert เลือก contructor Setter
@@ -107,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
                     if (myUserString.equals(jsonObject.getString("User"))) { // User คือ ชื่อ Coloumn ทำการ Check User
                         statusABoolean = false; // ค้นหา User ใน Table ถ้าเจอให้เป็น False (default เป็น True)
                         truePassword = jsonObject.getString("Password");    // ดึงข้อมูล Password ออกมาจาก Table
+                        loginNameString = jsonObject.getString("Name");
+                        loginSurnameString = jsonObject.getString("Surname");
+
                     }
                 }   // for
 
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     myAlert.myDialog(context, "ไม่มี User นี้",
                             "ไม่มี "+myUserString+" ในฐานข้อมูลของเรา");
                 } else if (myPasswordString.equals(truePassword)) {
-                    Toast.makeText(context, "Welcome", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Welcome "+ loginNameString +" "+loginSurnameString, Toast.LENGTH_SHORT).show();
                 } else {
                     MyAlert myAlert = new MyAlert();
                     myAlert.myDialog(context, "Password False",
