@@ -1,10 +1,13 @@
 package eco.phakphum.jokeebookshop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -98,6 +101,7 @@ public class ServiceActivity extends AppCompatActivity {
                 JSONArray jsonArray = new JSONArray(s);
 
                 // จองหน่วยความจำ เท่าที่ JSONARRAY อ่านมาได้
+
                 bookStrings = new String[jsonArray.length()];
                 priceStrings = new String[jsonArray.length()];
                 iconStrings = new String[jsonArray.length()];
@@ -111,9 +115,25 @@ public class ServiceActivity extends AppCompatActivity {
                     iconStrings[i] = jsonObject.getString("Cover");
 
                 }   // for
-                // การทำ Setter นำค่าที่ได้รับออกมาแสดงผล (ใน Widget ListView)
+                // การทำ Setter นำค่าที่ได้รับออกมาแสดงผล (ใน Widget ListView ที่ได้สรา้งเป็น Adapter ไว้)
                 MyAdapter myAdapter = new MyAdapter(context, bookStrings, priceStrings, iconStrings);
                 myListView.setAdapter(myAdapter);
+
+                // ทำการ Click ITEM Book เพื่อเข้า Detail
+                myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        // intent ไป DetailActivity โดยมีค่าที่ส่งไป (putExtra) ไปตามนี้...
+                        Intent intent = new Intent(ServiceActivity.this, DetailActivity.class);
+                        intent.putExtra("NameLogin", nameString);
+                        intent.putExtra("SurNameLogin", surnameString);
+                        intent.putExtra("Book", bookStrings[position]);
+                        intent.putExtra("Price", priceStrings[position]);
+                        intent.putExtra("Icon", iconStrings[position]);
+                        startActivity(intent);
+
+                    }   // onItemClick
+                });
 
             } catch (Exception e) {
                 Log.d("ShopV2", "e onPost ==> " + e.toString());
