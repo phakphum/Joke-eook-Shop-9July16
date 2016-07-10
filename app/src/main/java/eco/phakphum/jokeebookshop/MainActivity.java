@@ -1,5 +1,6 @@
 package eco.phakphum.jokeebookshop;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -119,7 +120,16 @@ public class MainActivity extends AppCompatActivity {
                     myAlert.myDialog(context, "ไม่มี User นี้",
                             "ไม่มี "+myUserString+" ในฐานข้อมูลของเรา");
                 } else if (myPasswordString.equals(truePassword)) {
-                    Toast.makeText(context, "Welcome "+ loginNameString +" "+loginSurnameString, Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(context, "Welcome "+ loginNameString +" "+loginSurnameString,
+                            Toast.LENGTH_SHORT).show();
+                    // ทำการ Intent ข้อมูลเพื่อส่งได้ยังหน้า ServiceActivity
+                    Intent intent = new Intent(MainActivity.this, ServiceActivity.class);
+                    intent.putExtra("Name", loginNameString);   // นำข้อมูลที่ต้องการส่งมาใส่ในตัวแปร Name เพื่อเตรียม intent ไปยีง Activity ServiceActivity
+                    intent.putExtra("Surname", loginSurnameString);
+                    startActivity(intent);
+                    finish();   // ตัด Session Time ของ Activity ต้องทำการ Login ใหม่ทุกครั้ง
+
                 } else {
                     MyAlert myAlert = new MyAlert();
                     myAlert.myDialog(context, "Password False",
