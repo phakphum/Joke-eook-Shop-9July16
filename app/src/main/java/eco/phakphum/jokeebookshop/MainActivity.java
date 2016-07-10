@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -49,11 +51,14 @@ public class MainActivity extends AppCompatActivity {
         // Explicit
         // Context เป็นการ ทำการพ่น ข้อมูลระหว่าง Class กับ Class
         private Context context;    // ตัวแปรสำหรับการเชื่อมต่อ
-        private String myURL,myUserString, myPasswordString;
+        private String myURL,myUserString, myPasswordString , truePassword;
         private boolean statusABoolean = true;
 
         // Alt + Insert เลือก contructor Setter
-        public SyncUserTABLE(Context context, String myURL, String myUserString, String myPasswordString) {
+        public SyncUserTABLE(Context context,
+                             String myURL,
+                             String myUserString,
+                             String myPasswordString) {
             this.context = context;
             this.myURL = myURL;
             this.myUserString = myUserString;
@@ -96,15 +101,25 @@ public class MainActivity extends AppCompatActivity {
                 // JSON Object:JSON Array
                 JSONArray jsonArray = new JSONArray(s);
                 for (int i=0;i<jsonArray.length();i+=1) {
+                    // Loop ค่า JSON
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    if (myUserString.equals(jsonObject.getString("User"))) {    // User คือ ชื่อ Coloumn
-                        statusABoolean = false; // ค้นหา User ใน Table ถ้าเจอให้เป็น False (default เป็น True)
-                    } else if (statusABoolean) {
-                        MyAlert myAlert = new MyAlert();
-                        myAlert.myDialog(context, "ไม่มี User นี้", "ไม่มี "+myUserString+" ในฐานข้อมูลของเรา");
-                    } else {
 
+                    if (myUserString.equals(jsonObject.getString("User"))) { // User คือ ชื่อ Coloumn ทำการ Check User
+                        statusABoolean = false; // ค้นหา User ใน Table ถ้าเจอให้เป็น False (default เป็น True)
+                        truePassword = jsonObject.getString("Password");    // ดึงข้อมูล Password ออกมาจาก Table
                     }
+                }   // for
+
+                if (statusABoolean) {
+                    MyAlert myAlert = new MyAlert();
+                    myAlert.myDialog(context, "ไม่มี User นี้",
+                            "ไม่มี "+myUserString+" ในฐานข้อมูลของเรา");
+                } else if (myPasswordString.equals(truePassword)) {
+                    Toast.makeText(context, "Welcome", Toast.LENGTH_SHORT).show();
+                } else {
+                    MyAlert myAlert = new MyAlert();
+                    myAlert.myDialog(context, "Password False",
+                            "Please Try Again Password False");
                 }
 
             } catch (Exception e) {
