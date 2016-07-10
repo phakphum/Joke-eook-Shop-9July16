@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private String userString, passwordString;
 
     // สร้าง URL JSON
-    private static final String urlJSON = "http://swiftcodingthai.com/9july/get_user_joke.php";
+    //private static final String urlJSON = "http://swiftcodingthai.com/9july/get_user_joke.php";
+    private String urlJSON; // วิธีกำหนดตัวแปร แบบค่าคงที่
 
 
 
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         // Blind Widget
         userEditText = (EditText) findViewById(R.id.editText5);
         passwordEditText = (EditText) findViewById(R.id.editText6);
+
+        // เรียก ใช้ Constant จากวิธีแบบค่าคงที่ (MyConstant)
+        MyConstant myConstant = new MyConstant();
+        urlJSON = myConstant.getUrlJSONuser();
 
     }   // Main Method
 
