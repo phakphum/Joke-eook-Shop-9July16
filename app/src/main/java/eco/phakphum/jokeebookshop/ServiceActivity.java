@@ -12,6 +12,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class ServiceActivity extends AppCompatActivity {
@@ -54,6 +56,8 @@ public class ServiceActivity extends AppCompatActivity {
         private Context context;
         private String myURL;
         private ListView myListView;
+        // ตัวแปรสำหรับ รับค่าจาก JSON
+        private String[] bookStrings,priceStrings, iconStrings;
 
         // สร้าง Constructor Alt+Insert เลือก Constructor เลือกตัวแปร
         public SynProduct(Context context, String myURL, ListView myListView) {
@@ -76,7 +80,6 @@ public class ServiceActivity extends AppCompatActivity {
                 Response response = okHttpClient.newCall(request).execute();
                 return response.body().string();
 
-
             } catch (Exception e) {
                 Log.d("ShopV2", "e doInBack ==> ");
                 return null;
@@ -90,6 +93,31 @@ public class ServiceActivity extends AppCompatActivity {
             super.onPostExecute(s);
             Log.d("ShopV2", "JSON ==> " + s);
 
+            try {
+                // สร้าง Instant
+                JSONArray jsonArray = new JSONArray(s);
+
+                // จองหน่วยความจำ เท่าที่ JSONARRAY อ่านมาได้
+                bookStrings = new String[jsonArray.length()];
+                priceStrings = new String[jsonArray.length()];
+                iconStrings = new String[jsonArray.length()];
+
+                for (int i=0;i<jsonArray.length();i+=1) {
+                    // วนลูกดึงค่า Object ใน JSON ออกมาที่ละค่า ไว้ใน jsonObject
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    // นำค่ามาจาก jsonObject Coloumn "Name" และ อื่นๆ มาใส่ในตัวแปร
+                    bookStrings[i] = jsonObject.getString("Name");
+                    priceStrings[i] = jsonObject.getString("Price");
+                    iconStrings[i] = jsonObject.getString("Cover");
+
+                }   // for
+                // การทำ Setter นำค่าที่ได้รับออกมาแสดงผล (ใน Widget ListView)
+                MyAdapter myAdapter = new MyAdapter(context, bookStrings, priceStrings, iconStrings);
+                myListView.setAdapter(myAdapter);
+
+            } catch (Exception e) {
+                Log.d("ShopV2", "e onPost ==> " + e.toString());
+            }
         }
     }   //SynProduct Class
 
